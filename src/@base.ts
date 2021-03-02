@@ -28,6 +28,8 @@ export namespace KVHBase {
     export interface Unit<T = unknown> {
       getBytes(): Uint8Array;
       asJs(): T;
+      diff(otherValue: Unit<T>): Uint8Array; //{action: delete,update,add, bytes: Uint8Array};
+      recover(...oldBytes: Uint8Array[]): Unit<T>;
     }
     export namespace Unit {
       export type Typeof<U> = U extends Unit<infer T> ? T : never;

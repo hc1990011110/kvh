@@ -19,7 +19,7 @@
         > 还是以翻译举例：
         > ui_kvh.subscribe('HELLO_WORD', ['zh-CN', 'autoTranslate-zh-CN', 'en'], updateView);
         > 当然，也是可以强行等待异步执行完毕：
-        > ui_kvh.subscribe('HELLO_WORD',['zh-TW', Await('translate-zh-CN2TW'), 'en'], updateView);​
+        > ui_kvh.subscribe('HELLO_WORD', ['zh-TW', Await('translate-zh-CN2TW'), 'en'], updateView);​
 1.  Value 的基础类型有 Collection、Number、Enum、String、Bytes、AST
 1.  Height 的是写入时必须填写的，它能基于此自动进行数据备份。
     1.  prevHeight 上一个记录点的高度
@@ -28,3 +28,15 @@
         1.  在[prevHeight,updatedHeight]范围内，value 都是不变的
     1.  可以理解成 Height 是一个全局的 key，且所有的 key 都对其有依赖
     1.  一旦全局的 Height 触发更新，就会触发一系列联动计算
+
+## 里程碑
+
+### M1
+
+- KVH-Engine
+  - 不需要实现 Type.Ast
+  - 底层使用 IndexedDB 实现
+  - 数据回滚的 Diff 算法，直接使用 BytesDiff
+- Database.Core
+- 事务 Transaction
+- 不需要实现 Database.Dict
