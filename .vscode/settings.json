@@ -1,6 +1,9 @@
 {
-    "typescript.tsdk": "node_modules\\typescript\\lib",
-    "files.associations": {
-      "*.tsconfig.json": "jsonc"
-    }
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "files.exclude": {
+    "packages/*/build": true
+  },
+  "files.associations": {
+    "*.tsconfig.json": "jsonc"
+  }
 }
