@@ -71,7 +71,10 @@ export namespace KVHBase {
       getByKey(key: Collection.TypeofItemKey<I>): Collection.TypeofItemValue<I>;
     }
     export namespace Collection {
-      export type Item<K extends Unit = Unit, V extends Unit = Unit> = {
+      export type Item<
+        K extends Key.Type = Key.Type,
+        V extends Value.Type = Value.Type
+      > = {
         key: K;
         value: V;
       };
@@ -80,29 +83,43 @@ export namespace KVHBase {
         ? V
         : never;
     }
-    export interface Ast extends Unit {
-      set(code: Ast.Builder): void;
+    export interface Ast<R = unknown> extends Unit<() => R> {
+      set(code: Ast.Builder<R>): void;
     }
     export namespace Ast {
       export const enum ACTION {}
     }
     export namespace Ast {
-      export interface Builder {}
+      export interface Builder<O = unknown> {
+        output: O;
+      }
     }
   }
   //#endregion
 
   export namespace Key {
-    export type Types = Type.StringUtf8 | Type.Enum | Type.Bytes;
-  }
-  //#region 候选
+    export type BaseType = Type.StringUtf8 | Type.Enum | Type.Bytes;
+    /**
+     * 候选
+     * 与key搭配使用，本质上我们可以使用 `fullKey=key+candidate` 来达成类似的效果
+     * 但这里仍然独立设计了candidate，是有针对性的优化
+     */
+    export namespace Candidate {
+      export type Type = Type.Enum;
+    }
+    export interface WithCandidateKey<
+      K extends BaseType = BaseType,
+      C extends Candidate.Type = Candidate.Type
+    > extends Type.Unit<{
+        key: Type.Unit.Typeof<K>;
+        candidate: Type.Unit.Typeof<C>;
+      }> {}
 
-  export namespace Candidate {
-    export type Types = Type.Enum;
+    export type Type = BaseType | WithCandidateKey;
   }
-  //#endregion
+
   export namespace Value {
-    export type Types =
+    export type Type =
       | Type.StringUtf8
       | Type.Enum
       | Type.Bytes

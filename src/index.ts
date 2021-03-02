@@ -6,4 +6,4 @@ export declare namespace BFChainKVH {
   export { KVHBase as Base };
 }
 
-type A = BFChainKVH.Base.Key.Types;
+type A = BFChainKVH.Base.Key.Type;
