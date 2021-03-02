@@ -1,11 +1,12 @@
 {
-  "name": "@kvh/test",
+  "name": "@kvh/demo",
   "version": "0.0.0",
   "license": "ISC",
   "type": "commonjs",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@kvh/kvh": "^0.0.0"
+    "@kvh/state-machine": "^0.0.0",
+    "@kvh/storage": "^0.0.0"
   }
 }

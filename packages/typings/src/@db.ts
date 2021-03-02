@@ -44,12 +44,16 @@ export declare namespace KVHDb {
       //     sync?: boolean;
       //   }[]
       // ): Core.Subscriber;
+
+      startTransaction(height: number): Promise<Transaction>;
     }
     namespace Core {
       interface KVHInfo {
         key: KVHBase.Key.Type;
-        value: KVHBase.Value.Type;
-        height: KVHBase.Height.Type;
+        result?: {
+          value: KVHBase.Value.Type;
+          height: KVHBase.Height.Type;
+        };
       }
       interface Subscriber extends Evt.AttachOnlyEvt<Core.KVHInfo> {
         readonly uid: string;
@@ -105,7 +109,7 @@ export declare namespace KVHDb {
       get(
         key: KVHBase.Type.Collection.TypeofItemKey<I>,
         candidates?: KVHBase.Key.Candidate.Type[]
-      ): Promise<KVHBase.Type.Collection.TypeofItemValue<I>>;
+      ): Promise<undefined | KVHBase.Type.Collection.TypeofItemValue<I>>;
       /**
        * 将这个事务变动的数据转化成 集合
        */

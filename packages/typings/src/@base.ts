@@ -9,8 +9,8 @@ export namespace T {
   export type Uint16 = number;
   export type Int32 = number;
   export type Uint32 = number;
-  export type Int64 = number;
-  export type Uint64 = number;
+  export type Int64 = bigint;
+  export type Uint64 = bigint;
   export type Float32 = number;
   export type Float64 = number;
   export type Sha256 = Uint8Array & { byteLength: 32; length: 32 };
@@ -25,7 +25,7 @@ export namespace KVHBase {
     /**
      * 基类
      */
-    export interface Unit<T = unknown> {
+    export interface Unit<T = unknown, F = T> extends Unit.ChangeAble<F> {
       getBytes(): Uint8Array;
       asJs(): T;
       diff(otherValue: Unit<T>): Uint8Array; //{action: delete,update,add, bytes: Uint8Array};
@@ -33,38 +33,62 @@ export namespace KVHBase {
     }
     export namespace Unit {
       export type Typeof<U> = U extends Unit<infer T> ? T : never;
+      export interface ChangeAble<T> {
+        fromJs(value: T): void;
+      }
     }
     /**
      * 字符串类型
      */
-    export interface StringUtf8 extends Unit<string> {
-      set(value: string): void;
-    }
+    export interface StringUtf8 extends Unit<string>, Unit.ChangeAble<string> {}
     /**
      * 二进制类型
      */
-    export interface Bytes extends Unit<Uint8Array> {
-      set(value: ArrayBufferView | ArrayBufferLike): void;
-    }
+    export interface Bytes
+      extends Unit<Uint8Array, ArrayBufferView | ArrayBufferLike> {}
     /**
      * 枚举类型
      */
-    export interface Enum<K = unknown, U extends Unit = Unit> {
-      getByName(name: K): U;
-      getBytesByName(name: K): Uint8Array;
-    }
+    export type Enum =
+      | Enum.Bool
+      | Enum.Int8
+      | Enum.Uint8
+      | Enum.Int16
+      | Enum.Uint16
+      | Enum.Int32
+      | Enum.Uint32
+      | Enum.Int64
+      | Enum.Uint64
+      | Enum.Float32
+      | Enum.Float64;
     export namespace Enum {
-      export interface Boolean extends Enum<T.Bool, Unit<T.Bool>> {}
-      export interface Int8 extends Enum<T.Int8, Unit<T.Int8>> {}
-      export interface Uint8 extends Enum<T.Uint8, Unit<T.Uint8>> {}
-      export interface Int16 extends Enum<T.Int16, Unit<T.Int16>> {}
-      export interface Uint16 extends Enum<T.Uint16, Unit<T.Uint16>> {}
-      export interface Int32 extends Enum<T.Int32, Unit<T.Int32>> {}
-      export interface Uint32 extends Enum<T.Uint32, Unit<T.Uint32>> {}
-      export interface Int64 extends Enum<T.Int64, Unit<T.Int64>> {}
-      export interface Uint64 extends Enum<T.Uint64, Unit<T.Uint64>> {}
-      export interface Float32 extends Enum<T.Float32, Unit<T.Float32>> {}
-      export interface Float64 extends Enum<T.Float64, Unit<T.Float64>> {}
+      export interface Bool extends Unit<T.Bool> {}
+      export interface Int8 extends Unit<T.Int8> {}
+      export interface Uint8 extends Unit<T.Uint8> {}
+      export interface Int16 extends Unit<T.Int16> {}
+      export interface Uint16 extends Unit<T.Uint16> {}
+      export interface Int32 extends Unit<T.Int32> {}
+      export interface Uint32 extends Unit<T.Uint32> {}
+      export interface Int64 extends Unit<T.Int64> {}
+      export interface Uint64 extends Unit<T.Uint64> {}
+      export interface Float32 extends Unit<T.Float32> {}
+      export interface Float64 extends Unit<T.Float64> {}
+
+      export interface BaseEnum<K = unknown, U extends Unit = Unit> {
+        getByName(name: K): U;
+        getBytesByName(name: K): Uint8Array;
+      }
+      export interface BoolEnum extends BaseEnum<T.Bool, Bool> {}
+      export interface Int8Enum extends BaseEnum<T.Int8, Int8> {}
+      export interface Uint8Enum extends BaseEnum<T.Uint8, Uint8> {}
+      export interface Int16Enum extends BaseEnum<T.Int16, Int16> {}
+      export interface Uint16Enum extends BaseEnum<T.Uint16, Uint16> {}
+      export interface Int32Enum extends BaseEnum<T.Int32, Int32> {}
+      export interface Uint32Enum extends BaseEnum<T.Uint32, Uint32> {}
+      export interface Int64Enum extends BaseEnum<T.Int64, Int64> {}
+      export interface Uint64Enum extends BaseEnum<T.Uint64, Uint64> {}
+      export interface Float32Enum extends BaseEnum<T.Float32, Float32> {}
+      export interface Float64Enum extends BaseEnum<T.Float64, Float64> {}
     }
     /**
      * key-value集合
@@ -100,7 +124,7 @@ export namespace KVHBase {
   //#endregion
 
   export namespace Key {
-    export type BaseType = Type.StringUtf8 | Type.Enum | Type.Bytes;
+    export type Type = Type.StringUtf8 | Type.Enum | Type.Bytes | Type.Ast;
     /**
      * 候选
      * 与key搭配使用，本质上我们可以使用 `fullKey=key+candidate` 来达成类似的效果
@@ -110,14 +134,14 @@ export namespace KVHBase {
       export type Type = Type.Enum;
     }
     export interface WithCandidateKey<
-      K extends BaseType = BaseType,
+      K extends Type = Type,
       C extends Candidate.Type = Candidate.Type
     > extends Type.Unit<{
         key: Type.Unit.Typeof<K>;
         candidate: Type.Unit.Typeof<C>;
       }> {}
 
-    export type Type = BaseType | WithCandidateKey;
+    export type MixType = Type | WithCandidateKey;
   }
 
   export namespace Value {
@@ -125,14 +149,13 @@ export namespace KVHBase {
       | Type.StringUtf8
       | Type.Enum
       | Type.Bytes
-      | Type.Collection
-      | Type.Ast;
+      | Type.Collection;
   }
 
   export namespace Height {
     export interface Type {
-      prevHeight: 0;
-      updatedHeight: 0;
+      prevHeight: number;
+      updatedHeight: number;
     }
   }
 }

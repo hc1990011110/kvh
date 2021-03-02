@@ -2,5 +2,7 @@
   "name": "@kvh/state-machine",
   "version": "0.0.0",
   "license": "ISC",
-  "main": "build/index.js"
+  "type": "commonjs",
+  "main": "build/index.js",
+  "types": "build/index.d.ts"
 }

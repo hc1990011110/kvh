@@ -1,9 +1,10 @@
-import { KVHBase } from "./@base";
+import { T, KVHBase } from "./@base";
 import { KVHDb } from "./@db";
+import { KVHEngine } from "./@engine";
+export * from "./@evt";
 export declare namespace BFChainKVH {
-  //   export type KVH = KVH.Db;
+  export { KVHEngine as Engine };
   export { KVHDb as DB };
   export { KVHBase as Base };
+  export { T };
 }
-
-type A = BFChainKVH.Base.Key.Type;

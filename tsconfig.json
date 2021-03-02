@@ -2,11 +2,26 @@
   "files": [],
   "include": [],
   "references": [
-    { "path": "./packages/typings/tsconfig.json" },
-    { "path": "./packages/state-machine/tsconfig.json" },
-    { "path": "./packages/storage/tsconfig.json" },
-    { "path": "./packages/engine/tsconfig.json" },
-    { "path": "./packages/kvh/tsconfig.json" },
-    { "path": "./packages/test/tsconfig.json" }
+    {
+      "path": "./packages/typings/tsconfig.json"
+    },
+    {
+      "path": "./packages/state-machine/tsconfig.json"
+    },
+    {
+      "path": "./packages/storage/tsconfig.json"
+    },
+    {
+      "path": "./packages/engine/tsconfig.json"
+    },
+    {
+      "path": "./packages/kvh/tsconfig.json"
+    },
+    {
+      "path": "./packages/demo/tsconfig.json"
+    },
+    {
+      "path": "./packages/test/tsconfig.json"
+    }
   ]
 }
