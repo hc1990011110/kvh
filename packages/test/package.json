@@ -1,0 +1,9 @@
+{
+  "name": "@kvh/test",
+  "version": "0.0.0",
+  "license": "ISC",
+  "main": "build/index.js",
+  "dependencies": {
+    "@kvh/kvh": "^0.0.0"
+  }
+}

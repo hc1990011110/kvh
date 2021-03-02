@@ -1,0 +1,12 @@
+{
+  "name": "@kvh/kvh",
+  "version": "0.0.0",
+  "license": "ISC",
+  "main": "build/index.js",
+  "dependencies": {
+    "@kvh/engine": "^0.0.0",
+    "@kvh/state-machine": "^0.0.0",
+    "@kvh/storage": "^0.0.0",
+    "@kvh/typings": "^0.0.0"
+  }
+}

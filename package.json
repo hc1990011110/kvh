@@ -1,15 +1,23 @@
 {
   "name": "kvh",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "tsc --build -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "typescript": "^4.2.2"
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1"
   }
 }
