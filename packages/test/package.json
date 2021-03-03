@@ -7,5 +7,9 @@
   "types": "build/index.d.ts",
   "dependencies": {
     "@kvh/kvh": "^0.0.0"
+  },
+  "devDependencies": {
+    "ava": "^3.15.0",
+    "conditional-type-checks": "^1.0.5"
   }
 }
