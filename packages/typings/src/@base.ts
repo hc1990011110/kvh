@@ -44,8 +44,7 @@ export namespace KVHBase {
     /**
      * 二进制类型
      */
-    export interface Bytes
-      extends Unit<Uint8Array, ArrayBufferView | ArrayBufferLike> {}
+    export interface Bytes extends Unit<Uint8Array, ArrayBufferView | ArrayBufferLike> {}
     /**
      * 枚举类型
      */
@@ -62,33 +61,61 @@ export namespace KVHBase {
       | Enum.Float32
       | Enum.Float64;
     export namespace Enum {
-      export interface Bool extends Unit<T.Bool> {}
-      export interface Int8 extends Unit<T.Int8> {}
-      export interface Uint8 extends Unit<T.Uint8> {}
-      export interface Int16 extends Unit<T.Int16> {}
-      export interface Uint16 extends Unit<T.Uint16> {}
-      export interface Int32 extends Unit<T.Int32> {}
-      export interface Uint32 extends Unit<T.Uint32> {}
-      export interface Int64 extends Unit<T.Int64> {}
-      export interface Uint64 extends Unit<T.Uint64> {}
-      export interface Float32 extends Unit<T.Float32> {}
-      export interface Float64 extends Unit<T.Float64> {}
+      export interface EnumWithAlias<A = unknown> {}
+      export interface Bool<V extends T.Bool = T.Bool, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Int8<V extends T.Int8 = T.Int8, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Uint8<V extends T.Uint8 = T.Uint8, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Int16<V extends T.Int16 = T.Int16, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Uint16<V extends T.Uint16 = T.Uint16, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Int32<V extends T.Int32 = T.Int32, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Uint32<V extends T.Uint32 = T.Uint32, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Int64<V extends T.Int64 = T.Int64, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Uint64<V extends T.Uint64 = T.Uint64, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Float32<V extends T.Float32 = T.Float32, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
+      export interface Float64<V extends T.Float64 = T.Float64, A = unknown> extends Unit<V>, EnumWithAlias<A> {}
 
-      export interface BaseEnum<K = unknown, U extends Unit = Unit> {
-        getByName(name: K): U;
-        getBytesByName(name: K): Uint8Array;
+      export type TypeMap<N = unknown, U extends Unit = Unit> = {
+        name: N;
+        value: U;
+      };
+      export namespace TypeMap {
+        export type GetName<T> = T extends TypeMap<infer N> ? N : never;
+        export type GetValue<T> = T extends TypeMap<infer _, infer U> ? U : never;
+        export type GetValueByName<T, N> = T extends TypeMap<infer Name, infer U>
+          ? N extends Name
+            ? U
+            : never
+          : never;
       }
-      export interface BoolEnum extends BaseEnum<T.Bool, Bool> {}
-      export interface Int8Enum extends BaseEnum<T.Int8, Int8> {}
-      export interface Uint8Enum extends BaseEnum<T.Uint8, Uint8> {}
-      export interface Int16Enum extends BaseEnum<T.Int16, Int16> {}
-      export interface Uint16Enum extends BaseEnum<T.Uint16, Uint16> {}
-      export interface Int32Enum extends BaseEnum<T.Int32, Int32> {}
-      export interface Uint32Enum extends BaseEnum<T.Uint32, Uint32> {}
-      export interface Int64Enum extends BaseEnum<T.Int64, Int64> {}
-      export interface Uint64Enum extends BaseEnum<T.Uint64, Uint64> {}
-      export interface Float32Enum extends BaseEnum<T.Float32, Float32> {}
-      export interface Float64Enum extends BaseEnum<T.Float64, Float64> {}
+
+      export interface BaseEnum<E extends TypeMap = TypeMap> {
+        getByName<K extends TypeMap.GetName<E>>(name: K): TypeMap.GetValueByName<E, K>;
+        getBytesByName(name: TypeMap.GetName<E>): Uint8Array;
+      }
+
+      export type BoolTypeMap = TypeMap<true, Bool<true>> | TypeMap<false, Bool<false>>;
+      export type Int8TypeMap = TypeMap<T.Int8, Int8>;
+      export type Uint8TypeMap = TypeMap<T.Uint8, Uint8>;
+      export type Int16TypeMap = TypeMap<T.Int16, Int16>;
+      export type Uint16TypeMap = TypeMap<T.Uint16, Uint16>;
+      export type Int32TypeMap = TypeMap<T.Int32, Int32>;
+      export type Uint32TypeMap = TypeMap<T.Uint32, Uint32>;
+      export type Int64TypeMap = TypeMap<T.Int64, Int64>;
+      export type Uint64TypeMap = TypeMap<T.Uint64, Uint64>;
+      export type Float32TypeMap = TypeMap<T.Float32, Float32>;
+      export type Float64TypeMap = TypeMap<T.Float64, Float64>;
+
+      export interface BoolEnum extends BaseEnum<BoolTypeMap> {}
+      export interface Int8Enum extends BaseEnum<Int8TypeMap> {}
+      export interface Uint8Enum extends BaseEnum<Uint8TypeMap> {}
+      export interface Int16Enum extends BaseEnum<Int16TypeMap> {}
+      export interface Uint16Enum extends BaseEnum<Uint16TypeMap> {}
+      export interface Int32Enum extends BaseEnum<Int32TypeMap> {}
+      export interface Uint32Enum extends BaseEnum<Uint32TypeMap> {}
+      export interface Int64Enum extends BaseEnum<Int64TypeMap> {}
+      export interface Uint64Enum extends BaseEnum<Uint64TypeMap> {}
+      export interface Float32Enum extends BaseEnum<Float32TypeMap> {}
+      export interface Float64Enum extends BaseEnum<Float64TypeMap> {}
     }
     /**
      * key-value集合
@@ -97,17 +124,12 @@ export namespace KVHBase {
       getByKey(key: Collection.TypeofItemKey<I>): Collection.TypeofItemValue<I>;
     }
     export namespace Collection {
-      export type Item<
-        K extends Key.Type = Key.Type,
-        V extends Value.Type = Value.Type
-      > = {
+      export type Item<K extends Key.Type = Key.Type, V extends Value.Type = Value.Type> = {
         key: K;
         value: V;
       };
       export type TypeofItemKey<I> = I extends Item<infer K> ? K : never;
-      export type TypeofItemValue<I> = I extends Item<infer _, infer V>
-        ? V
-        : never;
+      export type TypeofItemValue<I> = I extends Item<infer _, infer V> ? V : never;
     }
     export interface Ast<R = unknown> extends Unit<() => R> {
       set(code: Ast.Builder<R>): void;
@@ -145,11 +167,7 @@ export namespace KVHBase {
   }
 
   export namespace Value {
-    export type Type =
-      | Type.StringUtf8
-      | Type.Enum
-      | Type.Bytes
-      | Type.Collection;
+    export type Type = Type.StringUtf8 | Type.Enum | Type.Bytes | Type.Collection;
   }
 
   export namespace Height {
