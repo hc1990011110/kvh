@@ -43,10 +43,7 @@ class WritableStorage<
   ) {}
   set<K extends KVH.Engine.Engine.TransactionStorage.KeyVal.GetKey<E>>(
     key: K,
-    data: {
-      value: KVH.Engine.Engine.TransactionStorage.KeyVal.GetValueByKey<E, K>;
-      height: KVH.Engine.Engine.TransactionStorage.HeightInfo;
-    },
+    value: KVH.Engine.Engine.TransactionStorage.KeyVal.GetValueByKey<E, K>,
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
@@ -63,9 +60,7 @@ class WritableStorage<
 //   }
 // }
 
-export class Engine<
-    E extends KVH.Engine.Engine.TransactionStorage.KeyVal = KVH.Engine.Engine.TransactionStorage.KeyVal
-  >
+export class Engine<E extends KVH.Engine.Engine.TransactionStorage.KeyVal = KVH.Engine.Engine.TransactionStorage.KeyVal>
   extends TransactionStorage<E>
   implements KVH.Engine.Engine<E> {
   openTransaction(height: number): Promise<KVH.Engine.Engine.TransactionStorage<E>> {
@@ -74,7 +69,15 @@ export class Engine<
   has(key: KVH.Engine.Engine.TransactionStorage.KeyVal.GetKey<E>): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  get<K extends KVH.Engine.Engine.TransactionStorage.KeyVal.GetKey<E>>(key: K): Promise<{ value: KVH.Engine.Engine.TransactionStorage.KeyVal.GetValueByKey<E, K>; height: KVH.Engine.Engine.TransactionStorage.HeightInfo; } | undefined> {
+  get<K extends KVH.Engine.Engine.TransactionStorage.KeyVal.GetKey<E>>(
+    key: K,
+  ): Promise<
+    | {
+        value: KVH.Engine.Engine.TransactionStorage.KeyVal.GetValueByKey<E, K>;
+        height: KVH.Engine.Engine.TransactionStorage.HeightInfo;
+      }
+    | undefined
+  > {
     throw new Error("Method not implemented.");
   }
   // readonly backup = new BackupStorage<E>();

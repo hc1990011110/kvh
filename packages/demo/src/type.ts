@@ -24,10 +24,10 @@ abstract class CommonUnit<T = unknown, F = T> extends Unit<T, F> {
 export class StringUtf8<T extends string = string, F = T>
   extends CommonUnit<T, F>
   implements KVH.Base.Type.StringUtf8<T, F> {
-  diff(oldValue: Unit<T, F>): KVH.Base.Type.Unit.Diff {
+  diff(oldValue: StringUtf8<T, F>): KVH.Base.Type.Unit.Diff {
     return { mode: DIFF_MODE.BACKUP, bytes: oldValue.getBytes() };
   }
-  recover(diff: KVH.Base.Type.Unit.Diff): Unit<T, F> {
+  recover(diff: KVH.Base.Type.Unit.Diff): StringUtf8<T, F> {
     const { mode } = diff;
     switch (mode) {
       case DIFF_MODE.BACKUP:
