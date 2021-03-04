@@ -1,3 +1,4 @@
+import "./@global";
 import { T, KVHBase } from "./@base";
 import { KVHDb } from "./@db";
 import { KVHEngine } from "./@engine";
@@ -8,3 +9,4 @@ export declare namespace BFChainKVH {
   export { KVHBase as Base };
   export { T };
 }
+export * from "./const";
