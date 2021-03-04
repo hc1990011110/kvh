@@ -95,17 +95,17 @@ export namespace KVHBase {
       | Enum.Float32
       | Enum.Float64;
     export namespace Enum {
-      export interface Bool<V extends T.Bool = T.Bool, F = V> extends Unit<V, F> {}
-      export interface Int8<V extends T.Int8 = T.Int8, F = V> extends Unit<V, F> {}
-      export interface Uint8<V extends T.Uint8 = T.Uint8, F = V> extends Unit<V, F> {}
-      export interface Int16<V extends T.Int16 = T.Int16, F = V> extends Unit<V, F> {}
-      export interface Uint16<V extends T.Uint16 = T.Uint16, F = V> extends Unit<V, F> {}
-      export interface Int32<V extends T.Int32 = T.Int32, F = V> extends Unit<V, F> {}
-      export interface Uint32<V extends T.Uint32 = T.Uint32, F = V> extends Unit<V, F> {}
-      export interface Int64<V extends T.Int64 = T.Int64, F = V> extends Unit<V, F> {}
-      export interface Uint64<V extends T.Uint64 = T.Uint64, F = V> extends Unit<V, F> {}
-      export interface Float32<V extends T.Float32 = T.Float32, F = V> extends Unit<V, F> {}
-      export interface Float64<V extends T.Float64 = T.Float64, F = V> extends Unit<V, F> {}
+      export interface Bool<V extends T.Bool = T.Bool, F = unknown> extends Unit<V, F> {}
+      export interface Int8<V extends T.Int8 = T.Int8, F = unknown> extends Unit<V, F> {}
+      export interface Uint8<V extends T.Uint8 = T.Uint8, F = unknown> extends Unit<V, F> {}
+      export interface Int16<V extends T.Int16 = T.Int16, F = unknown> extends Unit<V, F> {}
+      export interface Uint16<V extends T.Uint16 = T.Uint16, F = unknown> extends Unit<V, F> {}
+      export interface Int32<V extends T.Int32 = T.Int32, F = unknown> extends Unit<V, F> {}
+      export interface Uint32<V extends T.Uint32 = T.Uint32, F = unknown> extends Unit<V, F> {}
+      export interface Int64<V extends T.Int64 = T.Int64, F = unknown> extends Unit<V, F> {}
+      export interface Uint64<V extends T.Uint64 = T.Uint64, F = unknown> extends Unit<V, F> {}
+      export interface Float32<V extends T.Float32 = T.Float32, F = unknown> extends Unit<V, F> {}
+      export interface Float64<V extends T.Float64 = T.Float64, F = unknown> extends Unit<V, F> {}
 
       export interface Factory<E extends NamedType = NamedType> extends Unit.Factory<NamedType.GetValue<E>> {
         getByName<K extends NamedType.GetName<E>>(name: K): NamedType.GetValueByName<E, K>;

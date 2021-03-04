@@ -19,13 +19,13 @@ export class EngineBuilder<
   ): KVH.Engine.Engine.Builder<TM, FM | KVH.Engine.Engine.Builder.FlagedFactory<F, T>> {
     throw new Error("Method not implemented.");
   }
-  defineKey<K extends KVH.Base.Key.Type, F extends KVH.Engine.Engine.Builder.FlagedType.GetFlag<FM>>(
+  defineKey<K extends KVH.Base.Key.Type, F extends KVH.Engine.Engine.Builder.FlagedFactory.GetFlag<FM>>(
     key: K,
     typeFlag: F,
   ): KVH.Engine.Engine.Builder<
     KVH.Engine.Engine.TransactionStorage.KeyVal<
       K,
-      KVH.Base.Type.Unit.FactoryReturn<KVH.Engine.Engine.Builder.FlagedType.GetFactoryByFlag<FM, F>>
+      KVH.Base.Type.Unit.FactoryReturn<KVH.Engine.Engine.Builder.FlagedFactory.GetFactoryByFlag<FM, F>>
     >,
     FM
   > {

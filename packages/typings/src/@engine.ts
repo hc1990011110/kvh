@@ -64,11 +64,12 @@ export declare namespace KVHEngine {
         typeFlag: F,
         Factory: T,
       ): Builder<KV, FT | Builder.FlagedFactory<F, T>>;
-      defineKey<K extends KVHBase.Key.Type, F extends Builder.FlagedType.GetFlag<FT>>(
+      defineKey<K extends KVHBase.Key.Type, F extends Builder.FlagedFactory.GetFlag<FT>>(
         key: K,
         typeFlag: F,
       ): Builder<
-        KV | TransactionStorage.KeyVal<K, KVHBase.Type.Unit.FactoryReturn<Builder.FlagedType.GetFactoryByFlag<FT, F>>>,
+        | KV
+        | TransactionStorage.KeyVal<K, KVHBase.Type.Unit.FactoryReturn<Builder.FlagedFactory.GetFactoryByFlag<FT, F>>>,
         FT
       >;
       toEngine(): Promise<Engine<KV>>;
@@ -78,7 +79,7 @@ export declare namespace KVHEngine {
         flag: F;
         factory: T;
       };
-      export namespace FlagedType {
+      export namespace FlagedFactory {
         export type GetFlag<E> = E extends FlagedFactory<infer F, infer _> ? F : never;
         export type GetFactory<E> = E extends FlagedFactory<infer _, infer T> ? T : never;
         export type GetFactoryByFlag<FT, F> = FT extends FlagedFactory<infer Flag, infer T>
