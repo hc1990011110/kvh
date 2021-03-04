@@ -1,5 +1,13 @@
 import { BFChainKVH as KVH, TYPE_FLAG } from "@kvh/typings";
-import { BoolFactory, Int8, Int8Factory, EnumFactory, StringUtf8, StringUtf8Factory } from "../type";
+import {
+  BoolFactory,
+  Int8,
+  Int8Factory,
+  EnumFactory,
+  StringUtf8,
+  StringUtf8Factory,
+  StringUtf8FactoryCtor,
+} from "../type";
 
 export class EngineBuilder<
   TM extends KVH.Engine.Engine.TransactionStorage.KeyVal = never,
@@ -67,8 +75,14 @@ class ColorFactoryCtor extends EnumFactory<ColorTypeMap> {
     return res;
   }
 }
+const ColorFactory = new ColorFactoryCtor();
+
+class CountryFactoryCtor extends StringUtf8FactoryCtor<StringUtf8<"China"> | StringUtf8<"U.S"> | StringUtf8<"Japen">> {}
+const CountryFactory = new CountryFactoryCtor();
+
 export const enum CUSTOM_TYPE_FLAG {
-  COLOR = 20,
+  Color = 20,
+  Country,
 }
 
 async function test() {
@@ -76,10 +90,18 @@ async function test() {
     .defineType(TYPE_FLAG.StringUtf8, StringUtf8Factory)
     .defineType(TYPE_FLAG.Bool, BoolFactory)
     .defineType(TYPE_FLAG.Int8, Int8Factory)
-    .defineType(CUSTOM_TYPE_FLAG.COLOR, Int8Factory)
+    .defineType(CUSTOM_TYPE_FLAG.Color, ColorFactory)
+    .defineType(CUSTOM_TYPE_FLAG.Country, CountryFactory)
     .defineKey(new StringUtf8("name"), TYPE_FLAG.StringUtf8)
     .defineKey(new StringUtf8("age"), TYPE_FLAG.Int8)
+    .defineKey(new StringUtf8("home"), CUSTOM_TYPE_FLAG.Country)
+    .defineKey(new StringUtf8("skin"), CUSTOM_TYPE_FLAG.Color)
     .toEngine();
   const name = await engine.get(new StringUtf8("name"));
   const age = await engine.get(new StringUtf8("age"));
+  const skin = await engine.get(new StringUtf8("skin"));
+  const home = await engine.get(new StringUtf8("home"));
+  const transaction = await engine.openTransaction(2);
+  transaction.writer.set(new StringUtf8("skin"), ColorFactory.getByName("red"));
+  transaction.writer.set(new StringUtf8("home"), CountryFactory.create("China"));
 }

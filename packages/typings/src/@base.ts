@@ -189,7 +189,7 @@ export namespace KVHBase {
   }
 
   export namespace Value {
-    export type Type = Type.StringUtf8 | Type.Enum | Type.Bytes | Type.Collection;
+    export type Type = Type.StringUtf8 | Type.Enum | Type.Bytes | Type.Ast | Type.Collection;
     export type Factory = Type.Unit.Factory<Type>;
   }
 

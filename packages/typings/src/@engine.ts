@@ -49,7 +49,8 @@ export declare namespace KVHEngine {
         readonly height: HeightInfo;
         set<K extends KeyVal.GetKey<E>>(
           key: K,
-          data: { value: KeyVal.GetValueByKey<E, K>; height: HeightInfo },
+          value: KeyVal.GetValueByKey<E, K>,
+          // data: { value: KeyVal.GetValueByKey<E, K>; height: HeightInfo },
         ): Promise<void>;
         // setValue
         // setPrevHeight
