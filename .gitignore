@@ -5,3 +5,5 @@ dist
 build
 tmp
 **.log
+.cache
+packages/test/data

@@ -103,16 +103,15 @@ export declare namespace KVHEngine {
     ): Promise<Engine.TransactionStorage.HeightInfo>;
 
     readDiff(
-      key: Uint8Array,
+      key: KVHBase.Type.Unit,
       height: number,
     ): Promise<
       | undefined
       | {
-          typeFlag: TYPE_FLAG;
-          diffList: KVHBase.Type.Unit.Diff[];
-          height: Engine.TransactionStorage.HeightInfo;
+          diff: KVHBase.Type.Unit.Diff;
+          preHeight: number;
         }[]
     >;
-    writeDiff(key: Uint8Array, height: number, diff: KVHBase.Type.Unit.Diff): Promise<void>;
+    writeDiff(key: KVHBase.Type.Unit, height: number, diff: KVHBase.Type.Unit.Diff): Promise<void>;
   }
 }

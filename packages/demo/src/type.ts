@@ -327,13 +327,14 @@ export class Float64Enum extends BaseEnum<KVH.Base.Type.Enum.Float64TypeMap> imp
   }
 } */
 
-export function recover(typeFlag: TYPE_FLAG, source: unknown, diffList: KVH.Base.Type.Unit.Diff[]) {
+export function recover(typeFlag: TYPE_FLAG, source: Uint8Array, diffList: KVH.Base.Type.Unit.Diff[] = []) {
   switch (typeFlag) {
     case TYPE_FLAG.StringUtf8:
-      let res = new StringUtf8(source as string);
+      let res = new StringUtf8(StringUtf8.decoder.decode(source));
       for (const diff of diffList) {
         res = res.recover(diff);
       }
+      return res;
       break;
     case TYPE_FLAG.Bool:
       break;

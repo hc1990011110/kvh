@@ -1,5 +1,5 @@
 /**数据差异模式 */
-export const enum DIFF_MODE {
+export enum DIFF_MODE {
   /**删除模式
    * 将会完整保存旧值，用于恢复数据
    */
@@ -16,7 +16,7 @@ export const enum DIFF_MODE {
   BACKUP,
 }
 
-export const enum TYPE_FLAG {
+export enum TYPE_FLAG {
   StringUtf8,
   Bool,
   Int8,

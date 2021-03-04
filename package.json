@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsc --build -w",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node ./node_modules/ava/cli.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
@@ -14,7 +14,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "typescript": "^4.2.2"
   },

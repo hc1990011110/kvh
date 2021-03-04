@@ -6,9 +6,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@kvh/state-machine": "^0.0.0",
-    "@kvh/storage": "^0.0.0",
-    "idb-keyval": "^5.0.4"
+    "@kvh/state-machine": "^0.0.0"
   },
   "devDependencies": {
     "fake-indexeddb": "^3.1.2"
