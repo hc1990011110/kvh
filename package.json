@@ -5,23 +5,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc --build -w",
+    "dev": "tsc -b -w",
     "test": "node ./node_modules/ava/cli.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+    "docs:serve": "vitepress serve docs",
+    "build": "run-s build:eslintrc docs:build",
+    "build:eslintrc": "ts-node scripts/build.ts",
+    "lint": "eslint packages/** --ext .ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "workspaces": [
-    "packages/*"
-  ],
-  "dependencies": {
-    "typescript": "^4.2.2"
-  },
+  "workspaces": ["packages/*"],
+  "dependencies": {},
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.21.0",
+    "eslint-config-alloy": "^3.10.0",
     "lerna": "^3.22.1",
+    "typescript": "^4.2.3",
     "vitepress": "^0.12.2"
   }
 }
