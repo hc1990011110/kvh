@@ -5,14 +5,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc --build -w",
+    "dev": "tsc -b -w",
     "test": "node ./node_modules/ava/cli.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
     "build": "run-s build:eslintrc docs:build",
     "build:eslintrc": "ts-node scripts/build.ts",
-    "eslint": "eslint xxx.ts"
+    "lint": "eslint packages/** --ext .ts"
   },
   "keywords": [],
   "author": "",
