@@ -12,12 +12,12 @@
     "docs:serve": "vitepress serve docs",
     "build": "run-s build:eslintrc docs:build",
     "build:eslintrc": "ts-node scripts/build.ts",
-    "lint": "eslint packages/** --fix --ext .ts"
+    "lint": "eslint packages/** --fix --ext .ts",
+    "commit": "git-cz"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
     }
   },
   "lint-staged": {
@@ -29,8 +29,12 @@
   "workspaces": ["packages/*"],
   "dependencies": {},
   "devDependencies": {
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
+    "commitizen": "^4.2.3",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.21.0",
     "eslint-config-alloy": "^3.10.0",
     "husky": "^5.1.3",
