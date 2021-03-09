@@ -20,6 +20,12 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "lint-staged": {
     "packages/**/*.{.ts}": ["eslint", "git add"]
   },
