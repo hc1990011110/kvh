@@ -3,8 +3,8 @@ declare namespace KVH2 {
     build<Template extends DB.GetKey<TemplateValue>>(
       key: Template,
       params: KB.BuildKeyParams<Template, AliasType>,
-    ): Promise<DB.KeyUnit<KB.DatabaseKey<Template>>>;
-    toDatabase(): Promise<Database<KB.DatabaseKeyValue<AliasType, TemplateValue>>>;
+    ): Util.PromiseMaybe<DB.KeyUnit<KB.DatabaseKey<Template>>>;
+    toDatabase(): Util.PromiseMaybe<Database<KB.DatabaseKeyValue<AliasType, TemplateValue>>>;
   }
   namespace KB {
     type TV<K extends string = string, V extends DB.ValueUnit = DB.ValueUnit> = { key: K; val: V };
@@ -63,10 +63,13 @@ declare namespace KVH2 {
   }
 
   interface Database<T extends DB.KV = DB.KV> {
-    open(height: number): Promise<Transaction<T>>;
-    get<K extends DB.GetKey<T>>(key: DB.KeyUnit<K>, height?: number): Promise<DB.GetResult<T, K> | undefined>;
+    open(height: number): Util.PromiseMaybe<DB.Transaction<T>>;
+    get<K extends DB.GetKey<T>>(key: DB.KeyUnit<K>, height?: number): Util.PromiseMaybe<DB.GetResult<T, K> | undefined>;
     sub<K extends DB.GetKey<T>>(key: DB.KeyUnit<K>): DB.Subject<DB.GetResult<T, K>>;
-    hook<K extends DB.GetKey<T>>(key: DB.KeyUnit<K>, pull: (height: number, key: K) => unknown): Promise<void>;
+    hook<K extends DB.GetKey<T>>(
+      key: DB.KeyUnit<K>,
+      pull: (height: number, key: K) => unknown,
+    ): Util.PromiseMaybe<void>;
   }
   namespace DB {
     type KV<K extends string = string, V extends ValueUnit = ValueUnit> = { key: K; val: V };
@@ -93,9 +96,12 @@ declare namespace KVH2 {
     /**事务 */
     interface Transaction<T extends KV = KV> {
       readonly height: number;
-      load<K extends DB.GetKey<T>>(key: K, height?: number): Promise<DB.GetValByKey<T, K>>;
-      store<K extends DB.GetKey<T>>(key: K, value: DB.GetValByKey<T, K>): Promise<void>;
-      add<K extends DB.GetKeyByVal<T, number>>(key: K, value: DB.GetValByKey<T, K>): Promise<DB.GetValByKey<T, K>>;
+      load<K extends DB.GetKey<T>>(key: K, height?: number): Util.PromiseMaybe<DB.GetValByKey<T, K>>;
+      store<K extends DB.GetKey<T>>(key: K, value: DB.GetValByKey<T, K>): Util.PromiseMaybe<void>;
+      add<K extends DB.GetKeyByVal<T, number>>(
+        key: K,
+        value: DB.GetValByKey<T, K>,
+      ): Util.PromiseMaybe<DB.GetValByKey<T, K>>;
     }
   }
 
@@ -111,31 +117,8 @@ declare namespace Evt {
     post(data: V): void;
   }
 }
-
-export class MemStorage {
-  private _store = new Map<string, string>();
-  write(key: string, value: string) {
-    this._store.set(key, value);
-  }
-  read(key: string) {
-    return this._store.get(key);
-  }
-}
-
-export class Transaction<T extends KVH2.DB.KV = KVH2.DB.KV> implements KVH2.DB.Transaction<T> {
-  constructor(public readonly height: number) {}
-  load<K extends KVH2.DB.GetKey<T>>(key: K, height?: number): Promise<KVH2.DB.GetValByKey<T, K>> {
-    throw new Error('Method not implemented.');
-  }
-  store<K extends KVH2.DB.GetKey<T>>(key: K, value: KVH2.DB.GetValByKey<T, K>): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-  add<K extends KVH2.DB.GetKeyByVal<T, number>>(
-    key: K,
-    value: KVH2.DB.GetValByKey<T, K>,
-  ): Promise<KVH2.DB.GetValByKey<T, K>> {
-    throw new Error('Method not implemented.');
-  }
+declare namespace Util {
+  type PromiseMaybe<T> = T | PromiseLike<T>;
 }
 
 // import { Worker, isMainThread, workerData, parentPort as _parentPort, MessageChannel } from 'worker_threads';
