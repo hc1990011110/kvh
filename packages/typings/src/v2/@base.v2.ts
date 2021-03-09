@@ -3,7 +3,7 @@ declare namespace KVH2 {
     build<Template extends DB.GetKey<TemplateValue>>(
       key: Template,
       params: KB.BuildKeyParams<Template, AliasType>,
-    ): DB.KeyUnit<KB.DatabaseKey<Template>>;
+    ): Promise<DB.KeyUnit<KB.DatabaseKey<Template>>>;
     toDatabase(): Promise<Database<KB.DatabaseKeyValue<AliasType, TemplateValue>>>;
   }
   namespace KB {
@@ -162,7 +162,7 @@ async function test() {
     .toBuilder();
   const database = await keyBuilder.toDatabase();
 
-  const key1 = keyBuilder.build('{senderId:Address}.voteTo.{recipientId:Address}.equity', {
+  const key1 = await keyBuilder.build('{senderId:Address}.voteTo.{recipientId:Address}.equity', {
     senderId: new Address(),
     recipientId: new Address(),
   });
