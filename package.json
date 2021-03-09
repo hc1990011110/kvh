@@ -17,7 +17,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
+      "path": "node_modules/cz-customizable"
     }
   },
   "husky": {
@@ -27,12 +27,17 @@
     }
   },
   "lint-staged": {
-    "packages/**/*.{.ts}": ["eslint", "git add"]
+    "packages/**/*.{.ts}": [
+      "eslint",
+      "git add"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^12.0.1",
@@ -40,7 +45,9 @@
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
     "commitizen": "^4.2.3",
+    "commitlint-config-cz": "^0.13.2",
     "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^6.3.0",
     "eslint": "^7.21.0",
     "eslint-config-alloy": "^3.10.0",
     "husky": "^5.1.3",
