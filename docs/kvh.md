@@ -4,7 +4,7 @@
 
 ### 状态树（engine）
 
-- get(key: string, { address?: string, height?: number })
+- get(key: string, { height?: number })
 
 - hook(key: string, transationCallback: async (trasation) => {  })
   
@@ -23,6 +23,75 @@
   开启事务，可以修改状态
 
 ### 存储（storage）
+
+假设现在有一个需求，要求查询某个地址在某个高度对某个地址投票消耗的权益。
+
+那么如何保证查询最快。
+
+针对上诉例子可以建立一个kv数据库
+
+```typescript
+{
+    [heightU8a, `${key}-${senderAddress}-${receiveId}`]: equity,
+    string
+}
+db.get(`preRound.{senderAddress}.voteTo.{receiveId}.accEquit`, {
+    senderAddress: 'sdfd',
+    receiveId: 'fdsf'
+});
+```
+
+如果只考虑如上情况的话，这样的存储查询效率最高。但是这样的数据是没有关联性的，无法实现查询。
+但是假设现在新增一个需求，要查看某个区块高度，某个地址的投票列表。这时候就要遍历所有的key，进行筛选。
+针对以上情况，可以建立一个索引库（kvh）进行来增加查询效率。
+
+```typescript
+/// 查询某个高度我的投票列表
+
+/// 状态表
+{
+    voteList: {
+        maxHeight: 3000,
+        value: {
+            [senderAddress]: receiveList
+        }
+    },
+}
+或
+{
+    [voteList-${senderAddress}]: {
+        maxHeight: 3000,
+        value: [address1, ...]
+    },
+}
+/// diff 表
+{
+    [${key}-${height}]: {
+        preHeight: number,
+        diff: Diff,
+    }
+}
+```
+
+查看所有关注者在最近高度（状态）下的投票总数
+
+```typescript
+engine.subscribe(
+    [
+        `${voteList}-${address1}`, // key1
+        `${voteList}-${address2}` // key2
+    ],
+    // 当key1,key2发生变动的时候，（通过对比数据产生新值）触发回调
+    (list1, list2) => {
+        return list1.length + list2.length;
+    },
+)
+-->
+engine.runAst(
+`$count{${voteList}-${address1}} + $count{${voteList}-${address2}}`,
+(count) => {console.log(count)}
+)
+```
 
 - export(maxHeight, minHeight)
 
