@@ -1,9 +1,9 @@
-import { BFChainKVH } from ".";
-import { KVHBase, T } from "./@base";
-import { Evt } from "./@evt";
+import { BFChainKVH } from '.';
+import { KVHBase, T } from './@base';
+import { Evt } from './@evt';
 export declare namespace KVHEngine {
-  export type DIFF_MODE = import("./const").DIFF_MODE;
-  export type TYPE_FLAG = import("./const").TYPE_FLAG;
+  export type DIFF_MODE = import('./const').DIFF_MODE;
+  export type TYPE_FLAG = import('./const').TYPE_FLAG;
 
   export interface Engine<E extends Engine.TransactionStorage.KeyVal = Engine.TransactionStorage.KeyVal>
     extends Engine.TransactionStorage.ReadonlyStorage<E> {
@@ -95,23 +95,7 @@ export declare namespace KVHEngine {
    * Nodejs依赖于LevelDB
    */
   export interface BaseStorage {
-    read(key: KVHBase.Type.Unit, height?: number): Promise<KVHBase.Type.Unit | undefined>;
-    write(
-      key: KVHBase.Type.Unit,
-      value: KVHBase.Type.Unit,
-      height: number,
-    ): Promise<Engine.TransactionStorage.HeightInfo>;
-
-    readDiff(
-      key: KVHBase.Type.Unit,
-      height: number,
-    ): Promise<
-      | undefined
-      | {
-          diff: KVHBase.Type.Unit.Diff;
-          preHeight: number;
-        }[]
-    >;
-    writeDiff(key: KVHBase.Type.Unit, height: number, diff: KVHBase.Type.Unit.Diff): Promise<void>;
+    read(key: KVHBase.Type.Unit, height?: number): Promise<Uint8Array | undefined>;
+    write(key: KVHBase.Type.Unit, value: KVHBase.Type.Unit, height: number): Promise<void>;
   }
 }
