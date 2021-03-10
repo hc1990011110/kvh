@@ -8,28 +8,51 @@ class DatabaseValueUnit implements KVH2.DB.ValueUnit {
 }
 class Height {}
 class Address {}
-class Equity extends DatabaseValueUnit {}
-class Amount extends DatabaseValueUnit {}
+class Equity extends DatabaseValueUnit {
+  x = 2;
+}
+class Amount extends DatabaseValueUnit {
+  z = 1;
+}
 const keyBuilderFactory = {} as KVH2.KB.Factory;
 
 async function test() {
-  const keyBuilder = keyBuilderFactory
+  const keyBuilder = keyBuilderFactory // v1
     .$defineAliasType<'Address', Address>()
-    // .defineType('Equity', Equity)
-    // .defineType('Amount', Amount)
+    .$defineAliasType<'Equity', Equity>()
     .$defineTemplateValue<'{senderId:Address}.voteTo.{recipientId:Address}.equity', Equity>()
-    .$defineTemplateValue<'{senderId:Address}.transferTo.{recipientId:Address}.amount', Amount>()
+    .$defineTemplateValue<'{senderId:Address}.transferTo.{zzz:Address}.amount', Amount>()
     .toBuilder();
+
   const database = await keyBuilder.toDatabase();
+  {
+    const key1 = await keyBuilder.build('{senderId:Address}.voteTo.{recipientId:Address}.equity', {
+      senderId: new Address(),
+      recipientId: new Address(),
+    });
+    assert<
+      IsExact<
+        typeof key1,
+        KVH2.DB.KeyUnit<KVH2.KB.DatabaseKey<'{senderId:Address}.voteTo.{recipientId:Address}.equity'>>
+      >
+    >(true);
 
-  const key1 = await keyBuilder.build('{senderId:Address}.voteTo.{recipientId:Address}.equity', {
-    senderId: new Address(),
-    recipientId: new Address(),
-  });
-  assert<
-    IsExact<typeof key1, KVH2.DB.KeyUnit<KVH2.KB.DatabaseKey<'{senderId:Address}.voteTo.{recipientId:Address}.equity'>>>
-  >(true);
+    const equity = (await database.get(key1))!;
 
-  const equity = (await database.get(key1))!;
-  assert<IsExact<typeof equity.value, Equity>>(true);
+    assert<IsExact<typeof equity.value, Equity>>(true);
+  }
+
+  {
+    const key2 = await keyBuilder.build('{senderId:Address}.transferTo.{zzz:Address}.amount', {
+      senderId: new Address(),
+      zzz: new Address(),
+    });
+    assert<
+      IsExact<typeof key2, KVH2.DB.KeyUnit<KVH2.KB.DatabaseKey<'{senderId:Address}.transferTo.{zzz:Address}.amount'>>>
+    >(true);
+
+    const equity2 = (await database.get(key2, 199))!;
+
+    assert<IsExact<typeof equity2.value, Amount>>(true);
+  }
 }

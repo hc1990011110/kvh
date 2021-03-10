@@ -35,12 +35,6 @@ declare namespace KVH2 {
       type Unit<Template, AliasType extends AT> = Template extends `{${infer Key}:${infer Alias}}`
         ? { [K in Key]: GetTypeByAlias<AliasType, Alias> }
         : {};
-      type Assign<A, B> = {
-        [K in keyof A | keyof B]: K extends keyof A ? A[K] : K extends keyof B ? B[K] : unknown;
-      };
-      type A = { a: number };
-      type B = { b: string };
-      type AB = Assign<A, B>;
     }
 
     type DatabaseKey<Template> = Template extends `${infer Left}.${infer Right}`
@@ -49,16 +43,16 @@ declare namespace KVH2 {
     namespace DatabaseKey {
       type Unit<Template> = Template extends `{${infer _}}` ? `{${string}}` : Template;
     }
-    type DatabaseKeyValue<AliasType extends AT, TemplateValue extends TV> = DatabaseKeyValue.Unit<
-      DB.GetKey<TemplateValue>,
-      TemplateValue
-    >;
+    type DatabaseKeyValue<AliasType extends AT, TemplateValue extends TV> = {
+      [Template in GetTemplate<TemplateValue>]: DatabaseKeyValue.Unit<Template, TemplateValue>;
+    }[GetTemplate<TemplateValue>];
 
     namespace DatabaseKeyValue {
       type Unit<Template extends string, TemplateValue extends TV> = TV<
         DatabaseKey<Template>,
         DB.GetValByKey<TemplateValue, Template>
       >;
+      // type ObjIgnoreKeys<O extends {}> = O[keyof O];
     }
   }
 
