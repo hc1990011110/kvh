@@ -5,10 +5,7 @@ declare namespace KVH2 {
    *
    * 插件一定要安装在和数据库一样的线程里，但因为异步，并不排斥插件的一些逻辑在其它线程运行
    */
-  interface Plugin<KV extends KVH2.DB.KV = any>
-    extends Plugin.Base<KV>,
-      Partial<Plugin.BytesHooker<KV>>,
-      Partial<Plugin.TransactionHooker<KV>> {}
+  interface Plugin<KV extends KVH2.DB.KV = any> extends Plugin.Base<KV>, Partial<Plugin.Hookers<KV>> {}
 
   namespace Plugin {
     type Piper<I, O> = { params: Readonly<I>; pipe: (out?: O) => void };
@@ -69,6 +66,7 @@ declare namespace KVH2 {
       ): unknown;
     }
 
+    /**事务的钩子 */
     interface TransactionHooker<KV extends KVH2.DB.KV> {
       /**在准备写入数据库前 */
       transactionStore<K extends KVH2.DB.GetKey<KV>>(
@@ -99,9 +97,13 @@ declare namespace KVH2 {
       ): unknown;
       // type a = Required
     }
-    type Required<
-      Keys extends keyof BytesHooker<KV> | keyof TransactionHooker<KV>,
-      KV extends KVH2.DB.KV = any
-    > = Plugin<KV> & { [K in Keys]-?: Plugin<KV>[K] };
+
+    /**开发者工具的钩子 */
+    interface DevtoolsHooker<KV extends KVH2.DB.KV> {}
+
+    type Hookers<KV extends KVH2.DB.KV> = BytesHooker<KV> & TransactionHooker<KV> & DevtoolsHooker<KV>;
+
+    type Required<Keys extends keyof Hookers<KV>, KV extends KVH2.DB.KV = any> = Plugin<KV> &
+      { [K in Keys]-?: Plugin<KV>[K] };
   }
 }
