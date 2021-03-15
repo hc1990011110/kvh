@@ -7,3 +7,4 @@ tmp
 **.log
 .cache
 packages/test/data
+*.code-workspace
